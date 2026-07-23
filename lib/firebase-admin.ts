@@ -15,6 +15,7 @@ const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(
   /\\n/g,
   '\n'
 );
+console.log('Admin projectId raw:', JSON.stringify(projectId));
 console.log("Admin projectId:", projectId);
 
 if (!projectId || !clientEmail || !privateKey) {

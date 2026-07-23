@@ -229,7 +229,7 @@ button:disabled {
 .btn {
     background-color: #2bd97c;
     color: #032b41;
-    width: 100%;
+    width: 180px;
     height: 40px;
     border-radius: 4px;
     font-size: 16px;

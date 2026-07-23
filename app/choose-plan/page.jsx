@@ -24,6 +24,11 @@ export default function ChoosePlan() {
     ? "Start your 7-day free trial"
     : "Start your monthly subscription";
 
+    const disclaimerText = 
+    planChoice === "yearly"
+    ? "Cancel your trial at any time before it ends, and you won't be charged."
+    : "30-day money back guarantee, no questions asked."
+
     const handlePlanChoice = (event) => {
         setPlanChoice(event.target.value);
     };
@@ -135,7 +140,7 @@ export default function ChoosePlan() {
                         </div>
                     </div>
                     <div className="section__title">Choose the plan that fits you</div>
-                    <button className={`plan__card ${planChoice === 'yearly' ? 'active' : ''}`}>
+                    <label className={`plan__card ${planChoice === 'yearly' ? 'active' : ''}`}>
                         <input 
                         type="radio"
                         name='subscription'
@@ -147,11 +152,11 @@ export default function ChoosePlan() {
                             <div className="plan__card--price">$99.99/year</div>
                             <div className="plan__card--text">7-day free trial included</div>
                         </div>
-                    </button>
+                    </label>
                     <div className="plan__card--separator">
                         <div className="plan__separator">or</div>
                     </div>
-                    <button className={`plan__card ${planChoice === 'monthly' ? 'active' : ''}`}>
+                    <label className={`plan__card ${planChoice === 'monthly' ? 'active' : ''}`}>
                         <input 
                         type="radio"
                         name='subscription'
@@ -163,17 +168,17 @@ export default function ChoosePlan() {
                             <div className="plan__card--price">$9.99/month</div>
                             <div className="plan__card--text">No trial included</div>
                         </div>
-                    </button>
+                    </label>
                     <div className="plan__card--cta">
                         <span className='btn--wrapper'>
                             <button 
                             onClick={() => setShowCheckout(true)}
-                            className='btn'>
-                                <span>{buttonText}</span>
+                            className="btn">
+                                {buttonText}
                             </button>
                         </span>
                         <div className="plan__disclaimer">
-                            Cancel your trial at any time before it ends, and you won't be charged.
+                            {disclaimerText}
                         </div>
                     </div>
                     {showCheckout && (
