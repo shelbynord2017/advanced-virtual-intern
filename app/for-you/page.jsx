@@ -177,19 +177,19 @@ export default function forYou() {
                         {selectedBook.map((book, index) => (
                         <button 
                         key={index} 
-                        onClick={()=> router.push(`/book/${book.id}`)} 
+                        onClick={()=> router.push(`/book/${book?.id}`)} 
                         className='selected__book'>
                             <div className="selected__book--sub-title">
-                                {book.subTitle}
+                                {book?.subTitle}
                             </div>
                             <div className="selected__book--line"></div>
                             <div className="selected__book--content">
                                 <figure className='selected-book__image--wrapper'>
-                                    <img className="selected-book__image" src={book.imageLink} alt="" />
+                                    <img className="selected-book__image" src={book?.imageLink} alt="" />
                                 </figure>
                                 <div className="selected__book--text">
-                                    <div className="selected__book--title">{book.title}</div> 
-                                    <div className="selected__book--author">{book.author}</div>
+                                    <div className="selected__book--title">{book?.title}</div> 
+                                    <div className="selected__book--author">{book?.author}</div>
                                     <div className="selected__book--duration-wrapper">
                                         <div className="selected__book--icon">
                                             <FaPlayCircle className='selected__book--icon' />
