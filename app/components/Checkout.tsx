@@ -40,3 +40,4 @@ export default function Checkout({ priceId }: { priceId: string }) {
     </div>
   )
 }
+

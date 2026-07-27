@@ -11,6 +11,14 @@ export async function startCheckoutSession(
   "Action projectId:",
   process.env.FIREBASE_ADMIN_PROJECT_ID
   );
+
+  const payload = JSON.parse(
+  Buffer.from(idToken.split(".")[1], "base64url").toString()
+);
+
+console.log("Token audience:", payload.aud);
+console.log("Token issuer:", payload.iss);
+
   const decodedToken = await adminAuth.verifyIdToken(idToken);
 
   if (!decodedToken.email) {

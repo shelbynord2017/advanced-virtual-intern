@@ -36,11 +36,10 @@ export const AuthContextProvider = ({ children }) => {
 
     await setDoc(doc(db, 'users', userCredential.user.uid), {
       email: userCredential.user.email,
-      subscriptionStatus: 'inactive',
-      stripeCustomerId: null,
-      stripeSubscriptionId: null,
       createdAt: serverTimestamp()
     });
+
+    
 
     return userCredential;
   };

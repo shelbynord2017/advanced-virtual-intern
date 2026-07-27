@@ -44,7 +44,7 @@ export default function Modal({ isOpen, onClose, error, setError }) {
     try {
       await guestLogin();
       onClose();
-      router.push("for-you");
+      router.push("/for-you");
     } catch (err) {
       setError(err.message);
     }
@@ -53,7 +53,7 @@ export default function Modal({ isOpen, onClose, error, setError }) {
 
 
   return (
-    <body>
+    <div>
         <div className="wrapper wrapper__full">
             <div className='sidebar__overlay'>
                 <div className="auth__wrapper">
@@ -115,7 +115,7 @@ export default function Modal({ isOpen, onClose, error, setError }) {
                 </div>
             </div>
         </div>
-    </body>
+    </div>
   )
 }
 

@@ -33,6 +33,7 @@ export default function ChoosePlan() {
         setPlanChoice(event.target.value);
     };
 
+    
 
   return (    
     <div className="wrapper__full">
@@ -184,6 +185,7 @@ export default function ChoosePlan() {
                     {showCheckout && (
                     <Checkout priceId={priceId} />
                     )}
+                
                     <div className="faq__wrapper">
                         <div className="accordion__card">
                             <AccordionItem
