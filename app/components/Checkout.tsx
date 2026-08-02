@@ -24,7 +24,16 @@ export default function Checkout({ priceId }: { priceId: string }) {
 
     const idToken = await user.getIdToken()
     console.log("Calling startCheckoutSession");
-    return startCheckoutSession(priceId, idToken)
+
+    const clientSecret = await startCheckoutSession(priceId, idToken)
+
+    console.log('Client secret returned:', clientSecret)
+
+    if (typeof clientSecret !== 'string') {
+      throw new Error('startCheckoutSession did not return a client-secret string')
+    }
+
+    return clientSecret
   }, [priceId])
 
   return (
@@ -40,4 +49,3 @@ export default function Checkout({ priceId }: { priceId: string }) {
     </div>
   )
 }
-

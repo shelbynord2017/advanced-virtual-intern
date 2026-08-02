@@ -30,7 +30,6 @@ console.log("Token issuer:", payload.iss);
   const firebaseUID = decodedToken.uid;
 
 
-  
   const session = await stripe.checkout.sessions.create({
     ui_mode: 'embedded_page',
     redirect_on_completion: 'never',
@@ -56,8 +55,10 @@ console.log("Token issuer:", payload.iss);
 
 
     if (!session.client_secret) {
-    throw new Error("Stripe checkout session did not return a client secret");
+      throw new Error("Stripe checkout session did not return a client secret");
     }
+
+
 
     return session.client_secret;
   

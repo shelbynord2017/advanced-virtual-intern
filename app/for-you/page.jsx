@@ -4,9 +4,12 @@ import { FaHome, FaRegBookmark, FaPenAlt, FaSearch, FaPlayCircle, FaRegStar } fr
 import { IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
 import { CiClock2 } from "react-icons/ci";
 import { IoMdHelpCircle } from "react-icons/io";
-import { useAuth } from "../components/AuthContextProvider"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useAuth } from "../components/AuthContextProvider";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
 
 export default function forYou() {
   
@@ -174,7 +177,36 @@ export default function forYou() {
                             Selected just for you
                         </div>
                         <audio ></audio>
-                        {selectedBook.map((book, index) => (
+                        {loading ? (
+                            <div className="selected__book">
+                                <div className="selected__book--sub-title">
+                                    <Skeleton width={200} />
+                                </div>
+
+                                <div className="selected__book--line"></div>
+
+                                <div className="selected__book--content">
+                                    <figure className="selected-book__image--wrapper">
+                                        <Skeleton height={160} />
+                                    </figure>
+
+                                    <div className="selected__book--text">
+                                        <div className="selected__book--title">
+                                            <Skeleton width={160} />
+                                        </div>
+
+                                        <div className="selected__book--author">
+                                            <Skeleton width={100} />
+                                        </div>
+
+                                        <div className="selected__book--duration">
+                                            <Skeleton width={90} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                        selectedBook.map((book, index) => (
                         <button 
                         key={index} 
                         onClick={()=> router.push(`/book/${book?.id}`)} 
@@ -199,17 +231,40 @@ export default function forYou() {
                                 </div>
                             </div>
                         </button>
-                        ))} 
+                        ))
+                        )}
                         <div>
                             <div className="for-you__title">
                                 Recommended For You
                             </div>
                             <div className="for-you__sub-title">
                                 We think you'll like these
-                            </div>
-                            
+                            </div>                        
                             <div className="for-you__recommended--books">
-                                {recommendedBooks.map((book, index) => (
+                                {loading ? (
+                                Array.from({ length: 4 }).map((_, index) => (
+                                <div key={index} className="for-you__recommended--books-link">
+                                    <div className="recommended-book__image">
+                                        <Skeleton 
+                                            height={160} 
+                                        />
+                                    </div>
+                                    <div className="recommended__book--title">
+                                        <Skeleton width={50}/> 
+                                    </div>
+                                    <div className="recommended__book--author">
+                                        <Skeleton width={50} />
+                                    </div>
+                                    <div className="recommended__book--sub-title">
+                                        <Skeleton width={85} />
+                                    </div>
+                                    <div className="recommended__book--details">
+                                        <Skeleton width={65} />
+                                    </div>
+                                </div>
+                                ))
+                                ) : (
+                                recommendedBooks.map((book, index) => (
                                 <button 
                                 key={index} 
                                 onClick={()=> router.push(`/book/${book.id}`)} 
@@ -251,7 +306,8 @@ export default function forYou() {
                                         </div>
                                     </div>
                                 </button>
-                                 ))}
+                                 ))
+                                 )}
                             </div>
                            
                         </div>
@@ -263,7 +319,30 @@ export default function forYou() {
                                 Browse those books
                             </div>
                             <div className="for-you__recommended--books">
-                                {suggestedBooks.map((book, index) => (
+                                {loading ? (
+                                Array.from({ length: 4 }).map((_, index) => (
+                                <div key={index} className="for-you__recommended--books-link">
+                                    <div className="book__image">
+                                        <Skeleton 
+                                            height={160} 
+                                        />
+                                    </div>
+                                    <div className="recommended__book--title">
+                                        <Skeleton width={50}/> 
+                                    </div>
+                                    <div className="recommended__book--author">
+                                        <Skeleton width={50} />
+                                    </div>
+                                    <div className="recommended__book--sub-title">
+                                        <Skeleton width={85} />
+                                    </div>
+                                    <div className="recommended__book--details">
+                                        <Skeleton width={65} />
+                                    </div>
+                                </div>
+                                ))
+                                ) : ( 
+                                suggestedBooks.map((book, index) => (
                                 <button 
                                 key={index} 
                                 onClick={()=> router.push(`/book/${book.id}`)} 
@@ -301,7 +380,8 @@ export default function forYou() {
                                         </div>
                                     </div>
                                 </button>
-                                ))}
+                                ))
+                                )}
                             </div>
                         </div>
                     </div>

@@ -8,6 +8,9 @@ import { HiOutlineLightBulb } from "react-icons/hi";
 import { FaRegBookmark } from "react-icons/fa";
 import { LuBookOpenText } from "react-icons/lu";
 import { useRouter } from "next/navigation"
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
 
 export default function Book() {
 
@@ -40,7 +43,73 @@ fetchBook();
   return (
     <div className='row'>
         <div className="container">
-            <div className="inner__wrapper">
+            {loadingBook ? (
+                <div className="inner__wrapper">
+                    <div className="inner__book">
+                        <div className="inner-book__title">
+                            <Skeleton width={300} />
+                        </div>
+                        <div className="inner-book__author">
+                            <Skeleton width={150} /> 
+                        </div>
+                        <div className="inner-book__sub--title">
+                            <Skeleton width={400} /> 
+                        </div>
+                        <div className="inner-book__wrapper">
+                            <div className="inner-book__description--wrapper">
+                                <div className="inner-book__description">
+                                    <div className="inner-book__icon">
+                                        <Skeleton width={150} />
+                                    </div>
+                                </div>
+                                <div className="inner-book__description">
+                                    <div className="inner-book__icon">
+                                        <Skeleton width={150} />
+                                    </div>
+                                </div>
+                                <div className="inner-book__description">
+                                    <div className="inner-book__icon">
+                                        <Skeleton width={150} />
+                                    </div>
+                                </div>
+                                <div className="inner-book__description">
+                                    <div className="inner-book__icon">
+                                        <Skeleton width={150} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="inner-book__read--btn-wrapper">
+                            <div className="inner-book__read--btn"></div>
+                            <div className="inner-book__read--btn"></div>
+                        </div>
+                        <div className="inner-book__bookmark">
+                            <Skeleton width={200} />
+                        </div>
+                        <div className="inner-book__secondary--title">
+                            <Skeleton width={150} />
+                        </div>
+                        <div className="inner-books__tags--wrapper">
+                            <Skeleton width={300} />
+                        </div>
+                        <div className="inner-book__book--description">
+                            <Skeleton height={500} />
+                        </div>
+                        <h2 className="inner-book__secondary--title">
+                            <Skeleton width={150} />
+                        </h2>
+                        <div className="inner-book__author--description">
+                            <Skeleton height={500} />
+                        </div>
+                    </div>
+                    <div className="inner-book__img-wrapper">
+                        <figure className="book__image--wrapper">
+                            <Skeleton height={200} />
+                        </figure>
+                    </div>
+                </div>
+            ) : (
+            <div className='inner__wrapper'>
                 <div className="inner__book">
                     <div className="inner-book__title">{book.title}</div>
                     <div className="inner-book__author">{book.author}</div>
@@ -110,12 +179,14 @@ fetchBook();
                     </h2>
                     <div className="inner-book__author--description">{book.authorDescription}</div>
                 </div>
+                        
                 <div className="inner-book__img-wrapper">
                     <figure className="book__image--wrapper">
                         <img src={book.imageLink} alt="" />
                     </figure>
                 </div>
             </div>
+            )}
         </div>
     </div>
   )

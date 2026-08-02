@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { BsFillPlayCircleFill, BsFillPauseCircleFill } from "react-icons/bs";
 import { RiForward10Line } from "react-icons/ri";
 import { RiReplay10Line } from "react-icons/ri";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 
 export default function Player() {
@@ -96,6 +98,55 @@ export default function Player() {
 
 
   return (
+    loadingBook ? (
+        <div className="summary">
+            <div className="audio__book--summary">
+                <div className="audio__book--summary-title">
+                    <Skeleton width={400} />
+                </div>
+                <div className="audio__book--summary-text">
+                <Skeleton height={800} />
+                </div>
+            </div>
+
+            <div className="audio__wrapper">
+                <div className="audio__track--wrapper">
+                    <figure className='audio__track--image-mask'>
+                        <figure className='player-book__image--wrapper'>
+                            <Skeleton height={40} />
+                        </figure>
+                    </figure>
+                    <div className="audio__track--details-wrapper">
+                        <div className="player-audio__track--title">
+                            <Skeleton width={30} />
+                        </div>
+                        <div className="player-audio__track--author">
+                            <Skeleton width={20} /> 
+                        </div>
+                    </div>
+                </div>
+
+
+                <div className="audio__controls--wrapper">
+                    <div className="audio__controls">
+                        <button className="audio__controls--btn">
+                            <Skeleton circle width={15} height={15}/>
+                        </button>
+                        <button className="audio__controls--btn audio__controls--btn-play">
+                            <Skeleton circle width={30} height={30}/>
+                        </button>
+                        <button className="audio__controls--btn">
+                            <Skeleton circle width={15} height={15}/>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="audio__progress--wrapper">
+                    <Skeleton width={300} />
+                </div>
+            </div>        
+        </div>    
+    ) : (
     <div className="summary">
         <div className="audio__book--summary">
             <div className="audio__book--summary-title">
@@ -167,5 +218,6 @@ export default function Player() {
             </div>
         </div>
     </div>
+    )
   )
 }

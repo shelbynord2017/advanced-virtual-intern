@@ -5,20 +5,23 @@ import Modal from "../components/Modal";
 import { useAuth } from "../components/AuthContextProvider";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 
 export default function Settings() {
 
     const [subscription, setSubscription] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { user, authLoading } = useAuth();
+    const [subscriptionLoading, setSubscriptionLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [error, setError] = useState("");
 
-    const { user } = useAuth();
-
+    
     useEffect(() => {
         if (!user || user.isAnonymous) {
-            setLoading(false);
+            setSubscriptionLoading(false);
             return;
         }
 
@@ -27,7 +30,7 @@ export default function Settings() {
         const userDoc = await getDoc(
             doc(db, "users", user.uid)
         );
-        
+
         if (!userDoc.exists()) {
             throw new Error("User document was not found.");
         }
@@ -63,54 +66,120 @@ export default function Settings() {
         );
         setError(err.message);
         } finally {
-        setLoading(false);
+        setSubscriptionLoading(false);
         }
     }
 
     getData();
     }, [user]);
 
+
+    if (authLoading) {
+        return (
+            <div className="wrapper">
+                <div className="container">
+                    <div className="row">
+                    <div className="section__title page__title">
+                        <Skeleton width={150} />
+                    </div>
+
+                    <div className="setting__content">
+                        <div className="settings__sub--title">
+                        <Skeleton width={200} />
+                        </div>
+
+                        <div className="settings__text">
+                        <Skeleton width={100} />
+                        </div>
+                    </div>
+
+                    <div className="setting__content">
+                        <div className="settings__sub--title">
+                        <Skeleton width={50} />
+                        </div>
+
+                        <div className="settings__text">
+                        <Skeleton width={100} />
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     if (!user || user.isAnonymous) {
         return (
             <div className="wrapper">
-            <div className="container">
-                <div className="row">
-                <div className="section__title page__title">
-                    Settings
-                </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="section__title page__title">
+                            Settings
+                        </div>
 
-                <div className="settings__login--wrapper">
-                    <img src={login.src} alt="" />
+                        <div className="settings__login--wrapper">
+                            <img src={login.src} alt="" />
 
-                    <div className="settings__login--text">
-                    Login to your account to see your details.
+                            <div className="settings__login--text">
+                            Login to your account to see your details.
+                            </div>
+
+                            <button
+                            className="btn settings__login--btn"
+                            onClick={() => setIsModalOpen(true)}
+                            >
+                            Login
+                            </button>
+                        </div>
                     </div>
-
-                    <button
-                    className="btn settings__login--btn"
-                    onClick={() => setIsModalOpen(true)}
-                    >
-                    Login
-                    </button>
                 </div>
-                </div>
-            </div>
 
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                error={error}
-                setError={setError}
-            />
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    error={error}
+                    setError={setError}
+                />
             </div>
         );
     }
-  
-    if (loading) return <div>Loading settings...</div>;
+
+    if (subscriptionLoading) {
+        return (
+        <div className="wrapper">
+            <div className="container">
+                <div className="row">
+                <div className="section__title page__title">
+                    <Skeleton width={150} />
+                </div>
+
+                <div className="setting__content">
+                    <div className="settings__sub--title">
+                    <Skeleton width={200} />
+                    </div>
+
+                    <div className="settings__text">
+                    <Skeleton width={100} />
+                    </div>
+                </div>
+
+                <div className="setting__content">
+                    <div className="settings__sub--title">
+                    <Skeleton width={50} />
+                    </div>
+
+                    <div className="settings__text">
+                    <Skeleton width={100} />
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        )
+    }
 
 
   return (
-    
     <div className="wrapper">
       <div className="container">
         <div className="row">
@@ -141,5 +210,4 @@ export default function Settings() {
       </div>
     </div>
     );
-
 }
