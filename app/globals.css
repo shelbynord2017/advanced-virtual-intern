@@ -1274,7 +1274,7 @@ a {
     padding: 24px;
     max-width: 800px;
     margin: 0 auto;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 180px);
 }
 
 .audio__book--summary-title {
@@ -1346,6 +1346,10 @@ a {
   height: 48px;
   width: 48px;
   min-width: 48px;
+}
+
+.player__sidebar {
+  height: calc(100vh - 180px);
 }
 
 .book__image {

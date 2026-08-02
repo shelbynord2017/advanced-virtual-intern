@@ -6,6 +6,8 @@ import { RiForward10Line } from "react-icons/ri";
 import { RiReplay10Line } from "react-icons/ri";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import Searchbar from "../../components/Searchbar";
+import Sidebar from '../../components/Sidebar';
 
 
 export default function Player() {
@@ -98,7 +100,11 @@ export default function Player() {
 
 
   return (
-    loadingBook ? (
+    <>
+    <Sidebar className="player__sidebar"/>
+    <div className="wrapper">
+        <Searchbar />
+    {loadingBook ? (
         <div className="summary">
             <div className="audio__book--summary">
                 <div className="audio__book--summary-title">
@@ -218,6 +224,8 @@ export default function Player() {
             </div>
         </div>
     </div>
-    )
+    )}
+    </div>
+    </>
   )
 }

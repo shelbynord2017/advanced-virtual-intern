@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import Searchbar from "../components/Searchbar";
+import Sidebar from "../components/Sidebar";
 
 
 export default function forYou() {
@@ -21,17 +23,17 @@ export default function forYou() {
     const [suggestedBooks, setSuggestedBooks] = useState([])
     const [loading, setLoading] = useState(true);
 
-    const handleLogout = async () => {
-        console.log("logout clicked")
-        try {
-        console.log("before logout")
-        await logout();
-        console.log("after logout")
-        router.push("/");
-        } catch (err) {
-        setError("invalid email or password");
-        }
-    };
+    // const handleLogout = async () => {
+    //     console.log("logout clicked")
+    //     try {
+    //     console.log("before logout")
+    //     await logout();
+    //     console.log("after logout")
+    //     router.push("/");
+    //     } catch (err) {
+    //     setError("invalid email or password");
+    //     }
+    // };
 
     useEffect(()=> {
         async function fetchSelectedBook() {
@@ -93,83 +95,9 @@ export default function forYou() {
   
   return (
     <>
+        <Sidebar />
         <div className="wrapper">
-            <div className="search__background">
-                <div className="search__wrapper">
-                    <div className="search__content">
-                        <div className="search">
-                            <div className="search__input--wrapper">
-                                <input 
-                                    className='search__input'
-                                    placeholder='Search for books'
-                                    type="text" 
-                                />
-                                <div className="search__icon">
-                                    <FaSearch  className="sidebar__icon--img" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* <div className="sidebar__overlay sidebar__overlay--hidden"></div> */}
-            <div className="sidebar sidebar__closed">
-                <div className="sidebar__logo">
-                    <img src={logo.src} alt="" />
-                </div>
-                <div className="sidebar__wrapper">
-                    <div className="sidebar__top">
-                        <a className="sidebar__link--wrapper">
-                            <div className="sidebar__icon--wrapper">
-                                <FaHome className="sidebar__icon--img" />
-                            </div>
-                            <div className="sidebar__link--text">For you</div>
-                        </a>
-                        <a className="sidebar__link--wrapper">
-                            <div className="sidebar__icon--wrapper">
-                                <FaRegBookmark className="sidebar__icon--img" />
-                            </div>
-                            <div className="sidebar__link--text">My library</div>
-                        </a>
-                        <div className="sidebar__link--wrapper sidebar__link--not-allowed">
-                            <div className="sidebar__icon--wrapper">
-                                <FaPenAlt className="sidebar__icon--img" />
-                            </div>
-                            <div className="sidebar__link--text">Highlights</div>
-                        </div>
-                        <div className="sidebar__link--wrapper sidebar__link--not-allowed">
-                            <div className="sidebar__icon--wrapper">
-                                <FaSearch  className="sidebar__icon--img" />
-                            </div>
-                            <div className="sidebar__link--text">Search</div>
-                        </div>
-                    </div>
-                    <div className="sidebar__bottom">
-                        <div className="sidebar__link--wrapper sidebar__link--not-allowed">
-                            <div className="sidebar__icon--wrapper">
-                                <IoSettingsOutline className="sidebar__icon--img" />
-                            </div>
-                            <div className="sidebar__link--text">Settings</div>
-                        </div>
-                        <div className="sidebar__link--wrapper sidebar__link--not-allowed">
-                            <div className="sidebar__icon--wrapper">
-                                <IoMdHelpCircle className="sidebar__icon--img" />
-                            </div>
-                            <div className="sidebar__link--text">Help & Support</div>
-                        </div>
-                        <a 
-                        onClick={handleLogout}
-                        className="sidebar__link--wrapper">
-                            <div className="sidebar__icon--wrapper">
-                                <IoLogOutOutline className="sidebar__icon--img" />
-                            </div>
-                            <div 
-                            
-                            className="sidebar__link--text">Logout</div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <Searchbar />
             <div className="row">
                 <div className="container">
                     <div className="for-you__wrapper">

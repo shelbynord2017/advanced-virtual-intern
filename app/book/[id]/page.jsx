@@ -10,6 +10,8 @@ import { LuBookOpenText } from "react-icons/lu";
 import { useRouter } from "next/navigation"
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import Searchbar from "../../components/Searchbar";
+import Sidebar from '../../components/Sidebar';
 
 
 export default function Book() {
@@ -41,8 +43,13 @@ fetchBook();
 
 
   return (
+    <>
+    <Sidebar />
+    <div className="wrapper">
     <div className='row'>
+        <Sidebar />
         <div className="container">
+            <Searchbar />
             {loadingBook ? (
                 <div className="inner__wrapper">
                     <div className="inner__book">
@@ -189,5 +196,7 @@ fetchBook();
             )}
         </div>
     </div>
+    </div>
+    </>
   )
 }
