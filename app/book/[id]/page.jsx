@@ -79,7 +79,6 @@ export default function Book() {
               "Error fetching subscription:",
               err
           );
-          if (!cancelled) setError(err.message);
           } finally {
           if (!cancelled) setSubscriptionLoading(false);
           }
