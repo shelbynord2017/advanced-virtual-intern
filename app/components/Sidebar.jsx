@@ -7,6 +7,7 @@ import { IoMdHelpCircle } from "react-icons/io";
 import logo from '../../assets/logo.png'
 import { useAuth } from "../components/AuthContextProvider";
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 
 
 export default function Sidebar() {
@@ -37,12 +38,12 @@ export default function Sidebar() {
         </div>
         <div className="sidebar__wrapper">
             <div className="sidebar__top">
-                <a className="sidebar__link--wrapper">
+                <Link href="/for-you" className="sidebar__link--wrapper">
                     <div className="sidebar__icon--wrapper">
                         <FaHome className="sidebar__icon--img" />
                     </div>
                     <div className="sidebar__link--text">For you</div>
-                </a>
+                </Link>
                 <a className="sidebar__link--wrapper">
                     <div className="sidebar__icon--wrapper">
                         <FaRegBookmark className="sidebar__icon--img" />
@@ -63,12 +64,12 @@ export default function Sidebar() {
                 </div>
             </div>
             <div className="sidebar__bottom">
-                <div className="sidebar__link--wrapper sidebar__link--not-allowed">
+                <Link href="/settings" className="sidebar__link--wrapper">
                     <div className="sidebar__icon--wrapper">
                         <IoSettingsOutline className="sidebar__icon--img" />
                     </div>
                     <div className="sidebar__link--text">Settings</div>
-                </div>
+                </Link>
                 <div className="sidebar__link--wrapper sidebar__link--not-allowed">
                     <div className="sidebar__icon--wrapper">
                         <IoMdHelpCircle className="sidebar__icon--img" />

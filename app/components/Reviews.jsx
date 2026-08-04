@@ -12,7 +12,9 @@ export default function Reviews({onLoginClick}) {
               <div className="review__header">
                 <div className="review__name">Hanna M.</div>
                 <div className="review__stars">
-                  <BsStarFill />
+                  {[...Array(5)].map((_, index) => (
+                  <BsStarFill key={index} />
+                  ))}
                 </div>
               </div>
               <div className="review__body">
@@ -25,7 +27,9 @@ export default function Reviews({onLoginClick}) {
               <div className="review__header">
                 <div className="review__name">David B.</div>
                 <div className="review__stars">
-                  <BsStarFill />
+                  {[...Array(5)].map((_, index) => (
+                  <BsStarFill key={index} />
+                  ))}
                 </div>
               </div>
               <div className="review__body">
@@ -38,7 +42,9 @@ export default function Reviews({onLoginClick}) {
               <div className="review__header">
                 <div className="review__name">Nathan S.</div>
                 <div className="review__stars">
-                  <BsStarFill />
+                  {[...Array(5)].map((_, index) => (
+                  <BsStarFill key={index} />
+                  ))}
                 </div>
               </div>
               <div className="review__body">
@@ -52,7 +58,9 @@ export default function Reviews({onLoginClick}) {
               <div className="review__header">
                 <div className="review__name">Ryan R.</div>
                 <div className="review__stars">
-                  <BsStarFill />
+                  {[...Array(5)].map((_, index) => (
+                  <BsStarFill key={index} />
+                  ))}
                 </div>
               </div>
               <div className="review__body">
@@ -75,3 +83,8 @@ export default function Reviews({onLoginClick}) {
     </section>
   )
 }
+
+
+
+
+

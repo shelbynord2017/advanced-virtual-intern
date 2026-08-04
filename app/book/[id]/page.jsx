@@ -10,193 +10,225 @@ import { LuBookOpenText } from "react-icons/lu";
 import { useRouter } from "next/navigation"
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import Searchbar from "../../components/Searchbar";
-import Sidebar from '../../components/Sidebar';
+import { useAuth } from "../../components/AuthContextProvider";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 
 export default function Book() {
+  const { id } = useParams();
+  const [book, setBook] = useState(null);
+  const [loadingBook, setLoadingBook] = useState(true);
+  const [duration, setDuration] = useState("00:00");
+  const router = useRouter();
+  const { user, authLoading } = useAuth();
+  const [subscription, setSubscription] = useState(null);
+  const [subscriptionLoading, setSubscriptionLoading] = useState(true);
 
-const { id } = useParams();
-const [book, setBook] = useState([])
-const [loadingBook, setLoadingBook] = useState([])
-const router = useRouter();
+  const formatTime = (seconds) => {
+    if (!seconds || isNaN(seconds)) return "00:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
 
-useEffect(()=> {
+  useEffect(() => {
+          if (authLoading) return;
+          if (!user || user.isAnonymous) {
+              setSubscriptionLoading(false);
+              return;
+          }
+  
+      let cancelled = false;
+  
+      async function getData() {
+          try {
+          const userDoc = await getDoc(
+              doc(db, "users", user.uid)
+          );
+  
+          if (!userDoc.exists()) {
+              throw new Error("User document was not found.");
+          }
+  
+          const subscriptionId =
+              userDoc.data().stripeSubscriptionId;
+  
+          if (!subscriptionId) { 
+              setSubscriptionLoading(false); 
+              return; 
+          }
+  
+          const res = await fetch(
+              `/api/subscription?sub_id=${encodeURIComponent(
+              subscriptionId
+              )}`
+          );
+  
+          const data = await res.json();
+  
+          if (!res.ok) {
+              throw new Error(
+              data.error || "Unable to load subscription."
+              );
+          }
+  
+          if (!cancelled) setSubscription(data);
+          } catch (err) {
+          console.error(
+              "Error fetching subscription:",
+              err
+          );
+          if (!cancelled) setError(err.message);
+          } finally {
+          if (!cancelled) setSubscriptionLoading(false);
+          }
+      }
+  
+      getData();
+  
+      return () => { cancelled = true; };
+      }, [user, authLoading]);
+
+  useEffect(() => {
     async function fetchBook() {
-    try {
-    const response = await fetch(
-        `https://us-central1-summaristt.cloudfunctions.net/getBook?id=${id}`
-    );
-    const data = await response.json();
-    setBook(data || []);
-    setLoadingBook(false);
-    console.log(data)
-    } catch (error) {
-    console.error("Error fetching book:", error);
-    setBook([]);
-    setLoadingBook(false)
+      try {
+        const response = await fetch(
+          `https://us-central1-summaristt.cloudfunctions.net/getBook?id=${id}`
+        );
+        const data = await response.json();
+        setBook(data || null);
+        setLoadingBook(false);
+      } catch (error) {
+        console.error("Error fetching book:", error);
+        setBook(null);
+        setLoadingBook(false);
+      }
     }
-};
-fetchBook();
-}, []);
+    fetchBook();
+  }, [id]);
 
+  const handleListen = () => {
+    if (authLoading || subscriptionLoading) return;
 
+    if (
+        book.subscriptionRequired &&
+        (!user || user.isAnonymous || !subscription)
+    ) {
+        router.push("/choose-plan");
+        return;
+    }
+
+    router.push(`/player/${book.id}`);
+    };
+
+  useEffect(() => {
+    if (book?.audioLink) {
+      const audio = new Audio(book.audioLink);
+      audio.onloadedmetadata = () => {
+        setDuration(formatTime(audio.duration));
+      };
+    }
+  }, [book]);
 
   return (
-    <>
-    <Sidebar />
     <div className="wrapper">
-    <div className='row'>
-        <Sidebar />
+      <div className="row">
         <div className="container">
-            <Searchbar />
-            {loadingBook ? (
-                <div className="inner__wrapper">
-                    <div className="inner__book">
-                        <div className="inner-book__title">
-                            <Skeleton width={300} />
-                        </div>
-                        <div className="inner-book__author">
-                            <Skeleton width={150} /> 
-                        </div>
-                        <div className="inner-book__sub--title">
-                            <Skeleton width={400} /> 
-                        </div>
-                        <div className="inner-book__wrapper">
-                            <div className="inner-book__description--wrapper">
-                                <div className="inner-book__description">
-                                    <div className="inner-book__icon">
-                                        <Skeleton width={150} />
-                                    </div>
-                                </div>
-                                <div className="inner-book__description">
-                                    <div className="inner-book__icon">
-                                        <Skeleton width={150} />
-                                    </div>
-                                </div>
-                                <div className="inner-book__description">
-                                    <div className="inner-book__icon">
-                                        <Skeleton width={150} />
-                                    </div>
-                                </div>
-                                <div className="inner-book__description">
-                                    <div className="inner-book__icon">
-                                        <Skeleton width={150} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="inner-book__read--btn-wrapper">
-                            <div className="inner-book__read--btn"></div>
-                            <div className="inner-book__read--btn"></div>
-                        </div>
-                        <div className="inner-book__bookmark">
-                            <Skeleton width={200} />
-                        </div>
-                        <div className="inner-book__secondary--title">
-                            <Skeleton width={150} />
-                        </div>
-                        <div className="inner-books__tags--wrapper">
-                            <Skeleton width={300} />
-                        </div>
-                        <div className="inner-book__book--description">
-                            <Skeleton height={500} />
-                        </div>
-                        <h2 className="inner-book__secondary--title">
-                            <Skeleton width={150} />
-                        </h2>
-                        <div className="inner-book__author--description">
-                            <Skeleton height={500} />
-                        </div>
-                    </div>
-                    <div className="inner-book__img-wrapper">
-                        <figure className="book__image--wrapper">
-                            <Skeleton height={200} />
-                        </figure>
-                    </div>
+          {loadingBook || !book ? (
+            <div className="inner__wrapper">
+              <div className="inner__book">
+                <div className="inner-book__title"><Skeleton width={300} /></div>
+                <div className="inner-book__author"><Skeleton width={150} /></div>
+                <div className="inner-book__sub--title"><Skeleton width={400} /></div>
+                <div className="inner-book__wrapper">
+                  <div className="inner-book__description--wrapper">
+                    <div className="inner-book__description"><Skeleton width={150} /></div>
+                    <div className="inner-book__description"><Skeleton width={150} /></div>
+                    <div className="inner-book__description"><Skeleton width={150} /></div>
+                    <div className="inner-book__description"><Skeleton width={150} /></div>
+                  </div>
                 </div>
-            ) : (
-            <div className='inner__wrapper'>
-                <div className="inner__book">
-                    <div className="inner-book__title">{book.title}</div>
-                    <div className="inner-book__author">{book.author}</div>
-                    <div className="inner-book__sub--title">{book.subTitle}</div>
-                    <div className="inner-book__wrapper">
-                        <div className='inner-book__description--wrapper'>
-                            <div className="inner-book__description">
-                                <div className="inner-book__icon">
-                                    <FaRegStar className='inner-book__icon'/>
-                                </div>
-                                <div className="inner-book__overall--rating">{book.averageRating}</div>
-                                <div className="inner-book__total--rating">
-                                    &nbsp;({book.totalRating} ratings)
-                                </div>
-                            </div>
-                            <div className="inner-book__description">
-                                <div className="inner-book__icon">
-                                    <CiClock2 className='inner-book__icon'/>
-                                </div>
-                                <div className="inner-book__duration">00:00</div>
-                            </div>
-                            <div className="inner-book__description">
-                                <div className="inner-book__icon">
-                                    <FiMic className='inner-book__icon'/>
-                                </div>
-                                <div className="inner-book__type">{book.type}</div>
-                            </div>
-                            <div className="inner-book__description">
-                                <div className="inner-book__icon">
-                                    <HiOutlineLightBulb className='inner-book__icon'/>
-                                </div>
-                                <div className="inner-book__key--ideas">{book.keyIdeas} key ideas</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="inner-book__read--btn-wrapper">
-                        <button className='inner-book__read--btn'>
-                            <div className="inner-book__read--icon">
-                                <LuBookOpenText className="inner-book__read--icon"/>
-                            </div>
-                            <div className="inner-book__read--text">Read</div>
-                        </button>
-                        <button 
-                        onClick={()=> router.push(`/player/${book.id}`)}
-                        className='inner-book__read--btn'>
-                            <div className="inner-book__read--icon">
-                                <FiMic className="inner-book__read--icon"/>
-                            </div>
-                            <div className="inner-book__read--text">Listen</div>
-                        </button>
-                    </div>
-                    <div className="inner-book__bookmark">
-                        <div className="inner-book__bookmark--icon">
-                            <FaRegBookmark />
-                        </div>
-                        <div className="inner-book__bookmark--text">Add title to my library</div>
-                    </div>
-                    <div className="inner-book__secondary--title">
-                        What's it about?
-                    </div>
-                    <div className="inner-books__tags--wrapper">
-                        <div className="inner-book__tag">{book.tags?.join(", ")}</div>
-                    </div>
-                    <div className="inner-book__book--description">{book.bookDescription}</div>
-                    <h2 className="inner-book__secondary--title">
-                        About the author
-                    </h2>
-                    <div className="inner-book__author--description">{book.authorDescription}</div>
+                <div className="inner-book__read--btn-wrapper">
+                  <div className="inner-book__read--btn"></div>
+                  <div className="inner-book__read--btn"></div>
                 </div>
-                        
-                <div className="inner-book__img-wrapper">
-                    <figure className="book__image--wrapper">
-                        <img src={book.imageLink} alt="" />
-                    </figure>
-                </div>
+                <div className="inner-book__bookmark"><Skeleton width={200} /></div>
+                <div className="inner-book__secondary--title"><Skeleton width={150} /></div>
+                <div className="inner-books__tags--wrapper"><Skeleton width={300} /></div>
+                <div className="inner-book__book--description"><Skeleton height={500} /></div>
+                <h2 className="inner-book__secondary--title"><Skeleton width={150} /></h2>
+                <div className="inner-book__author--description"><Skeleton height={500} /></div>
+              </div>
+              <div className="inner-book__img-wrapper">
+                <figure className="book__image--wrapper"><Skeleton height={200} /></figure>
+              </div>
             </div>
-            )}
+          ) : (
+            <div className="inner__wrapper">
+              <div className="inner__book">
+                <div className="inner-book__title">{book.title}</div>
+                <div className="inner-book__author">{book.author}</div>
+                <div className="inner-book__sub--title">{book.subTitle}</div>
+                <div className="inner-book__wrapper">
+                  <div className="inner-book__description--wrapper">
+                    <div className="inner-book__description">
+                      <div className="inner-book__icon"><FaRegStar className="inner-book__icon" /></div>
+                      <div className="inner-book__overall--rating">{book.averageRating}</div>
+                      <div className="inner-book__total--rating">&nbsp;({book.totalRating} ratings)</div>
+                    </div>
+                    <div className="inner-book__description">
+                      <div className="inner-book__icon"><CiClock2 className="inner-book__icon" /></div>
+                      <div className="inner-book__duration">{duration}</div>
+                    </div>
+                    <div className="inner-book__description">
+                      <div className="inner-book__icon"><FiMic className="inner-book__icon" /></div>
+                      <div className="inner-book__type">{book.type}</div>
+                    </div>
+                    <div className="inner-book__description">
+                      <div className="inner-book__icon"><HiOutlineLightBulb className="inner-book__icon" /></div>
+                      <div className="inner-book__key--ideas">{book.keyIdeas} key ideas</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="inner-book__read--btn-wrapper">
+                  <button 
+                  onClick={handleListen}
+                  className="inner-book__read--btn"
+                  >
+                    <div className="inner-book__read--icon"><LuBookOpenText className="inner-book__read--icon" /></div>
+                    <div className="inner-book__read--text">Read</div>
+                  </button>
+                  <button 
+                  onClick={handleListen}
+                  className="inner-book__read--btn"
+                  >
+                    <div className="inner-book__read--icon"><FiMic className="inner-book__read--icon" /></div>
+                    <div className="inner-book__read--text">Listen</div>
+                  </button>
+                </div>
+                <div className="inner-book__bookmark">
+                  <div className="inner-book__bookmark--icon"><FaRegBookmark /></div>
+                  <div className="inner-book__bookmark--text">Add title to my library</div>
+                </div>
+                <div className="inner-book__secondary--title">What's it about?</div>
+                <div className="inner-books__tags--wrapper">
+                  <div className="inner-book__tag">{book.tags?.join(", ")}</div>
+                </div>
+                <div className="inner-book__book--description">{book.bookDescription}</div>
+                <h2 className="inner-book__secondary--title">About the author</h2>
+                <div className="inner-book__author--description">{book.authorDescription}</div>
+              </div>
+
+              <div className="inner-book__img-wrapper">
+                <figure className="book__image--wrapper">
+                  <img src={book.imageLink} alt="" />
+                </figure>
+              </div>
+            </div>
+          )}
         </div>
+      </div>
     </div>
-    </div>
-    </>
-  )
+  );
 }

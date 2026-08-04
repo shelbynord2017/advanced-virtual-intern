@@ -19,8 +19,10 @@ export default function Numbers() {
             </div>
             <div className="numbers">
               <div className="numbers__icon numbers__star--icon">
-                <BsStarFill />
-                <BsStarHalf />
+                {[...Array(Math.floor(4.5))].map((_, index) => (
+                <BsStarFill key={index} />
+                ))}
+                {4.5 % 1 !== 0 && <BsStarHalf />}
               </div>
               <div className="numbers__title">4.5 Stars</div>
               <div className="numbers__sub--title">

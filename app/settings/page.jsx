@@ -20,10 +20,13 @@ export default function Settings() {
 
     
     useEffect(() => {
+        if (authLoading) return;
         if (!user || user.isAnonymous) {
             setSubscriptionLoading(false);
             return;
         }
+
+    let cancelled = false;
 
     async function getData() {
         try {
@@ -38,10 +41,9 @@ export default function Settings() {
         const subscriptionId =
             userDoc.data().stripeSubscriptionId;
 
-        if (!subscriptionId) {
-            throw new Error(
-            "This user does not have a subscription."
-            );
+        if (!subscriptionId) { 
+            setSubscriptionLoading(false); 
+            return; 
         }
 
         const res = await fetch(
@@ -58,20 +60,22 @@ export default function Settings() {
             );
         }
 
-        setSubscription(data);
+        if (!cancelled) setSubscription(data);
         } catch (err) {
         console.error(
             "Error fetching subscription:",
             err
         );
-        setError(err.message);
+        if (!cancelled) setError(err.message);
         } finally {
-        setSubscriptionLoading(false);
+        if (!cancelled) setSubscriptionLoading(false);
         }
     }
 
     getData();
-    }, [user]);
+
+    return () => { cancelled = true; };
+    }, [user, authLoading]);
 
 
     if (authLoading) {
@@ -191,7 +195,9 @@ export default function Settings() {
             <div className="settings__sub--title">
               Your Subscription Plan
             </div>
-
+            {!subscriptionLoading && !subscription && (
+              <p>No active subscription yet.</p>
+            )}
             <div className="settings__text">
               {subscription?.planName}
             </div>
