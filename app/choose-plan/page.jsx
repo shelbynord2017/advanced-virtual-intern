@@ -37,64 +37,6 @@ export default function ChoosePlan() {
 
   return (    
     <div className="wrapper__full">
-        {/* <div className="sidebar__overlay sidebar__overlay--hidden"></div>
-        <div className="sidebar sidebar__closed">
-            <div className="sidebar__logo">
-                <img src={logo.src} alt="" />
-            </div>
-            <div className="sidebar__wrapper">
-                <div className="sidebar__top">
-                    <a className="sidebar__link--wrapper">
-                        <div className="sidebar__icon--wrapper">
-                            <img className="sidebar__icon--img" src={home.src} alt="" />
-                        </div>
-                        <div className="sidebar__link--text">For you</div>
-                    </a>
-                    <a className="sidebar__link--wrapper">
-                        <div className="sidebar__icon--wrapper">
-                            <img className="sidebar__icon--img" src={bookmark.src} alt="" />
-                        </div>
-                        <div className="sidebar__link--text">My library</div>
-                    </a>
-                    <div className="sidebar__link--wrapper sidebar__link--not-allowed">
-                        <div className="sidebar__icon--wrapper">
-                            <img className="sidebar__icon--img" src={pen.src} alt="" />
-                        </div>
-                        <div className="sidebar__link--text">Highlights</div>
-                    </div>
-                    <div className="sidebar__link--wrapper sidebar__link--not-allowed">
-                        <div className="sidebar__icon--wrapper">
-                            <img className="sidebar__icon--img" src={search.src} alt="" />
-                        </div>
-                        <div className="sidebar__link--text">Search</div>
-                    </div>
-                </div>
-                <div className="sidebar__bottom">
-                    <div className="sidebar__link--wrapper sidebar__link--not-allowed">
-                        <div className="sidebar__icon--wrapper">
-                            <img className="sidebar__icon--img" src={settings.src} alt="" />
-                        </div>
-                        <div className="sidebar__link--text">Settings</div>
-                    </div>
-                    <div className="sidebar__link--wrapper sidebar__link--not-allowed">
-                        <div className="sidebar__icon--wrapper">
-                            <img className="sidebar__icon--img" src={question.src} alt="" />
-                        </div>
-                        <div className="sidebar__link--text">Help & Support</div>
-                    </div>
-                    <a 
-                    onClick={handleLogout}
-                    className="sidebar__link--wrapper">
-                        <div className="sidebar__icon--wrapper">
-                            <img className="sidebar__icon--img" src={logout.src} alt="" />
-                        </div>
-                        <div 
-                        
-                        className="sidebar__link--text">Logout</div>
-                    </a>
-                </div>
-            </div>
-        </div> */}
         <div className="plan">
             <div className="plan__header--wrapper">
                 <div className="plan__header">
